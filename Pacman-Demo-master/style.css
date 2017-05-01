@@ -23,6 +23,11 @@ body{
 .pacman{
     background: url('images/pacman.gif');
 }
+
+.cherry{
+  background: url('images/cherry.jpg')
+
+}
 .sprite {
     background-position: center;
     background-repeat: no-repeat;
