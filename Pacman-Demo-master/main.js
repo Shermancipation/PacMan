@@ -75,28 +75,44 @@ function Pacman() {
     return $("<div class='pacman sprite'></div>");
 }
 
-
+var score = 0;
 // listen for keydown event
 $(document).keydown(function(e){
+
+    console.log("initial score" + score);
     switch (e.keyCode) {
-        // handle right
+
         case 39:
-            if(map_01[pacman.y][pacman.x + 1] === 2){
-              break;
-            } else {
+            if(map_01[pacman.y][pacman.x + 1] === 1){
+              score = score + 1;
+              console.log("current score:" + score);
+              $("#score").html('<h1>Score: ' + score + '</h1>');
               pacman.x = pacman.x + 1;
               pacman.y = pacman.y;
               map_01[pacman.y][pacman.x] = 0;
-              map_01[pacman.y][pacman.x -1] = 3;
+              map_01[pacman.y][pacman.x - 1] = 3;
               $('#board').children().remove();
               RenderMap(map_01);
               break;
             }
-            // move pacman up
-        case 40:
-            if(map_01[pacman.y + 1][pacman.x] === 2){
+            if(map_01[pacman.y][pacman.x + 1] === 3){
+              pacman.x = pacman.x + 1;
+              pacman.y = pacman.y;
+              map_01[pacman.y][pacman.x] = 0;
+              map_01[pacman.y][pacman.x - 1] = 3;
+              $('#board').children().remove();
+              RenderMap(map_01);
               break;
-            } else {
+            }
+            else if(map_01[pacman.y][pacman.x + 1] === 2){
+              break;
+            }
+            // move pacman right
+        case 40:
+            if(map_01[pacman.y + 1][pacman.x] === 1){
+              score = score + 1;
+              console.log("current score:" + score);
+              $("#score").html('<h1>Score: ' + score + '</h1>');
               pacman.x = pacman.x;
               pacman.y = pacman.y + 1;
               map_01[pacman.y][pacman.x] = 0;
@@ -105,30 +121,68 @@ $(document).keydown(function(e){
               RenderMap(map_01);
               break;
             }
-            // move pacman down
-        case 38:
-          if(map_01[pacman.y - 1][pacman.x] === 2){
-            break;
-          } else {
+            if(map_01[pacman.y + 1][pacman.x] === 3){
               pacman.x = pacman.x;
-              pacman.y = pacman.y - 1;
+              pacman.y = pacman.y + 1;
               map_01[pacman.y][pacman.x] = 0;
-              map_01[pacman.y + 1][pacman.x] = 3;
+              map_01[pacman.y - 1][pacman.x] = 3;
               $('#board').children().remove();
               RenderMap(map_01);
               break;
+            }
+            else if(map_01[pacman.y + 1][pacman.x] === 2){
+              break;
+            }
+            // move pacman down
+        case 38:
+          if(map_01[pacman.y - 1][pacman.x] === 1){
+            score = score + 1;
+            console.log("current score:" + score);
+            $("#score").html('<h1>Score: ' + score + '</h1>');
+            pacman.x = pacman.x;
+            pacman.y = pacman.y - 1;
+            map_01[pacman.y][pacman.x] = 0;
+            map_01[pacman.y + 1][pacman.x] = 3;
+            $('#board').children().remove();
+            RenderMap(map_01);
+            break;
+          }
+          if(map_01[pacman.y - 1][pacman.x] === 3){
+            pacman.x = pacman.x;
+            pacman.y = pacman.y - 1;
+            map_01[pacman.y][pacman.x] = 0;
+            map_01[pacman.y + 1][pacman.x] = 3;
+            $('#board').children().remove();
+            RenderMap(map_01);
+            break;
+          }
+          else if(map_01[pacman.y - 1][pacman.x] === 2){
+            break;
           }
           // move pacman up
         case 37:
-        if(map_01[pacman.y][pacman.x - 1] === 2){
-          break;
-        } else {
+          if(map_01[pacman.y][pacman.x - 1] === 1){
+            score = score + 1;
+            console.log("current score:" + score);
+            $("#score").html('<h1>Score: ' + score + '</h1>');
             pacman.x = pacman.x - 1;
             pacman.y = pacman.y;
             map_01[pacman.y][pacman.x] = 0;
             map_01[pacman.y][pacman.x + 1] = 3;
             $('#board').children().remove();
             RenderMap(map_01);
+            break;
+          }
+          if(map_01[pacman.y][pacman.x - 1] === 3){
+            pacman.x = pacman.x - 1;
+            pacman.y = pacman.y;
+            map_01[pacman.y][pacman.x] = 0;
+            map_01[pacman.y][pacman.x + 1] = 3;
+            $('#board').children().remove();
+            RenderMap(map_01);
+            break;
+          }
+          else if(map_01[pacman.y][pacman.x - 1] === 2){
             break;
           }
           // move pacman left

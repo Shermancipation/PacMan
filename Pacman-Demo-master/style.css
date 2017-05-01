@@ -1,6 +1,10 @@
 body{
     background-color: black;
 }
+
+#score {
+  color: white;
+}
 .row{
     margin-bottom: -4px;
 }
