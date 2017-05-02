@@ -113,7 +113,21 @@ function Empty() {
 
 // build a pacman and return it
 function Pacman() {
-    return $("<div class='pacman sprite'></div>");
+  if(keyCode === 39){
+    return $("<div class='pacmanright sprite'></div>")
+  }
+  else if(keyCode === 40){
+    return $("<div class='pacmandown sprite'></div>")
+  }
+  else if(keyCode === 38){
+    return $("<div class='pacmanup sprite'></div>")
+  }
+  else if(keyCode === 37){
+    return $("<div class='pacmanleft sprite'></div>")
+  }
+  else{
+    return $("<div class='pacmanleft sprite'></div>")
+  }
 }
 
 // build a cherry and return it
@@ -165,6 +179,7 @@ function moveLeft(){
   RenderMap(map_01);
 }
 
+var keyCode = 39;
 var score = 0;
 // listen for keydown event
 $(document).keydown(function(e){
@@ -172,6 +187,7 @@ $(document).keydown(function(e){
     switch (e.keyCode) {
 
         case 39:
+        keyCode = 39;
             if(map_01[pacman.y][pacman.x + 1] === 1){
               score = score + 1;
               $("#score").html('<h1>Score: ' + score + '</h1>');
@@ -197,6 +213,7 @@ $(document).keydown(function(e){
             }
             // move pacman right
         case 40:
+        keyCode = 40;
             if(map_01[pacman.y + 1][pacman.x] === 1){
               score = score + 1;
               $("#score").html('<h1>Score: ' + score + '</h1>');
@@ -222,6 +239,7 @@ $(document).keydown(function(e){
             }
             // move pacman down
         case 38:
+        keyCode = 38;
           if(map_01[pacman.y - 1][pacman.x] === 1){
             score = score + 1;
             $("#score").html('<h1>Score: ' + score + '</h1>');
@@ -247,6 +265,7 @@ $(document).keydown(function(e){
           }
           // move pacman up
         case 37:
+        keyCode = 37;
           if(map_01[pacman.y][pacman.x - 1] === 1){
             score = score + 1;
             $("#score").html('<h1>Score: ' + score + '</h1>');
