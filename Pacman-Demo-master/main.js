@@ -4,6 +4,12 @@ var pacman = {
     y: 7
 }
 
+// define ghost object
+var ghost = {
+  x: 12,
+  y: 2
+}
+
 //  define map as array
 // map_01[0][0] ==
 
@@ -12,19 +18,9 @@ var pacman = {
 // 3 = empty
 // 0 = pacman
 // 4 = cherry
+// 5 = ghost
 
 var map_01 = [
-//     [2,2,2,2,2,2,2,2,2,2],
-//     [2,1,1,1,1,1,1,1,1,2],
-//     [2,1,1,1,1,1,1,1,1,2],
-//     [2,1,1,1,1,1,1,1,1,2],
-//     [2,1,1,1,1,1,1,1,1,2],
-//     [2,1,1,1,1,1,1,1,1,2],
-//     [2,1,1,1,1,1,1,1,1,2],
-//     [2,1,1,1,1,1,1,1,1,2],
-//     [2,1,1,1,1,1,1,1,1,2],
-//     [2,2,2,2,2,2,2,2,2,2]
-// ]
 
 [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
 [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
@@ -58,14 +54,13 @@ var map_01 = [
 [2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2],
 [2, 4, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 4, 2],
 [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
-[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
 [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
 
 ]
 // iterate array and create elements and append
 function RenderMap(map){
     map[pacman.y][pacman.x] = 0;
+    map[ghost.y][ghost.x] = 5;
     for (var i = 0; i < map.length; i++) {
         var newRow = Row();
         for (var j = 0; j < map[i].length; j++) {
@@ -81,6 +76,10 @@ function RenderMap(map){
             }
             else if (map[i][j] == 4){
                 $(newRow).append(Cherry());
+            }
+
+            else if (map[i][j] == 5){
+                $(newRow).append(Ghost());
             }
             else{
                 $(newRow).append(Pacman());
@@ -122,6 +121,50 @@ function Cherry() {
     return $("<div class='cherry sprite'></div>")
 }
 
+function Ghost() {
+    return $("<div class='ghost sprite'></div>")
+}
+
+// Move pacman right
+function moveRight() {
+  pacman.x = pacman.x + 1;
+  pacman.y = pacman.y;
+  map_01[pacman.y][pacman.x] = 0;
+  map_01[pacman.y][pacman.x - 1] = 3;
+  $('#board').children().remove();
+  RenderMap(map_01);
+}
+
+// Move pacman down
+function moveDown() {
+  pacman.x = pacman.x;
+  pacman.y = pacman.y + 1;
+  map_01[pacman.y][pacman.x] = 0;
+  map_01[pacman.y - 1][pacman.x] = 3;
+  $('#board').children().remove();
+  RenderMap(map_01);
+}
+
+// Move pacman up
+function moveUp() {
+  pacman.x = pacman.x;
+  pacman.y = pacman.y - 1;
+  map_01[pacman.y][pacman.x] = 0;
+  map_01[pacman.y + 1][pacman.x] = 3;
+  $('#board').children().remove();
+  RenderMap(map_01);
+}
+
+// Move pacman left
+function moveLeft(){
+  pacman.x = pacman.x - 1;
+  pacman.y = pacman.y;
+  map_01[pacman.y][pacman.x] = 0;
+  map_01[pacman.y][pacman.x + 1] = 3;
+  $('#board').children().remove();
+  RenderMap(map_01);
+}
+
 var score = 0;
 // listen for keydown event
 $(document).keydown(function(e){
@@ -132,21 +175,21 @@ $(document).keydown(function(e){
             if(map_01[pacman.y][pacman.x + 1] === 1){
               score = score + 1;
               $("#score").html('<h1>Score: ' + score + '</h1>');
-              pacman.x = pacman.x + 1;
-              pacman.y = pacman.y;
-              map_01[pacman.y][pacman.x] = 0;
-              map_01[pacman.y][pacman.x - 1] = 3;
-              $('#board').children().remove();
-              RenderMap(map_01);
+              moveRight();
               break;
             }
+            if(map_01[pacman.y][pacman.x + 1] === 4){
+              score = score + 10;
+              $("#score").html('<h1>Score: ' + score + '</h1>');
+              moveRight();
+              break;
+            }
+            if(map_01[pacman.y][pacman.x + 1] === 5){
+              moveRight();
+              alert("Game Over!");
+            }
             if(map_01[pacman.y][pacman.x + 1] === 3){
-              pacman.x = pacman.x + 1;
-              pacman.y = pacman.y;
-              map_01[pacman.y][pacman.x] = 0;
-              map_01[pacman.y][pacman.x - 1] = 3;
-              $('#board').children().remove();
-              RenderMap(map_01);
+              moveRight();
               break;
             }
             else if(map_01[pacman.y][pacman.x + 1] === 2){
@@ -157,21 +200,21 @@ $(document).keydown(function(e){
             if(map_01[pacman.y + 1][pacman.x] === 1){
               score = score + 1;
               $("#score").html('<h1>Score: ' + score + '</h1>');
-              pacman.x = pacman.x;
-              pacman.y = pacman.y + 1;
-              map_01[pacman.y][pacman.x] = 0;
-              map_01[pacman.y - 1][pacman.x] = 3;
-              $('#board').children().remove();
-              RenderMap(map_01);
+              moveDown();
               break;
             }
+            if(map_01[pacman.y + 1][pacman.x] === 4){
+              score = score + 10;
+              $("#score").html('<h1>Score: ' + score + '</h1>');
+              moveDown();
+              break;
+            }
+            if(map_01[pacman.y + 1][pacman.x] === 5){
+                moveDown();
+                alert("Game Over!");
+            }
             if(map_01[pacman.y + 1][pacman.x] === 3){
-              pacman.x = pacman.x;
-              pacman.y = pacman.y + 1;
-              map_01[pacman.y][pacman.x] = 0;
-              map_01[pacman.y - 1][pacman.x] = 3;
-              $('#board').children().remove();
-              RenderMap(map_01);
+              moveDown();
               break;
             }
             else if(map_01[pacman.y + 1][pacman.x] === 2){
@@ -182,21 +225,21 @@ $(document).keydown(function(e){
           if(map_01[pacman.y - 1][pacman.x] === 1){
             score = score + 1;
             $("#score").html('<h1>Score: ' + score + '</h1>');
-            pacman.x = pacman.x;
-            pacman.y = pacman.y - 1;
-            map_01[pacman.y][pacman.x] = 0;
-            map_01[pacman.y + 1][pacman.x] = 3;
-            $('#board').children().remove();
-            RenderMap(map_01);
+            moveUp();
             break;
           }
+          if(map_01[pacman.y - 1][pacman.x] === 4){
+            score = score + 10;
+            $("#score").html('<h1>Score: ' + score + '</h1>');
+            moveUp();
+            break;
+          }
+          if(map_01[pacman.y - 1][pacman.x] === 5){
+            moveUp();
+            alert("Game Over!");
+          }
           if(map_01[pacman.y - 1][pacman.x] === 3){
-            pacman.x = pacman.x;
-            pacman.y = pacman.y - 1;
-            map_01[pacman.y][pacman.x] = 0;
-            map_01[pacman.y + 1][pacman.x] = 3;
-            $('#board').children().remove();
-            RenderMap(map_01);
+            moveUp();
             break;
           }
           else if(map_01[pacman.y - 1][pacman.x] === 2){
@@ -207,21 +250,21 @@ $(document).keydown(function(e){
           if(map_01[pacman.y][pacman.x - 1] === 1){
             score = score + 1;
             $("#score").html('<h1>Score: ' + score + '</h1>');
-            pacman.x = pacman.x - 1;
-            pacman.y = pacman.y;
-            map_01[pacman.y][pacman.x] = 0;
-            map_01[pacman.y][pacman.x + 1] = 3;
-            $('#board').children().remove();
-            RenderMap(map_01);
+            moveLeft();
             break;
           }
+          if(map_01[pacman.y][pacman.x - 1] === 4){
+            score = score + 10;
+            $("#score").html('<h1>Score: ' + score + '</h1>');
+            moveLeft();
+            break;
+          }
+          if(map_01[pacman.y][pacman.x - 1] === 5){
+            moveLeft();
+            alert("Game Over!");
+          }
           if(map_01[pacman.y][pacman.x - 1] === 3){
-            pacman.x = pacman.x - 1;
-            pacman.y = pacman.y;
-            map_01[pacman.y][pacman.x] = 0;
-            map_01[pacman.y][pacman.x + 1] = 3;
-            $('#board').children().remove();
-            RenderMap(map_01);
+            moveLeft();
             break;
           }
           else if(map_01[pacman.y][pacman.x - 1] === 2){

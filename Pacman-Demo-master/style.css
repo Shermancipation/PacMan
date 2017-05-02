@@ -24,6 +24,10 @@ body{
     background: url('images/pacman.gif');
 }
 
+.ghost{
+  background: url('images/ghost.jpg');
+}
+
 .cherry{
   background: url('images/cherry.jpg')
 
